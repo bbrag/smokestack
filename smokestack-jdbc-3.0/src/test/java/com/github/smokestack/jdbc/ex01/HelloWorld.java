@@ -21,7 +21,7 @@ public class HelloWorld {
      *
      * @param args ignored
      */
-    public static void main(String... args) throws Exception {
+    public void saveHello() throws Exception {
 		Class.forName("org.hsqldb.jdbcDriver" );
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:inmemory");
         Statement stat = conn.createStatement();
@@ -38,4 +38,20 @@ public class HelloWorld {
         conn.close();
     }
 
+    public void saveHelloAgain() throws Exception {
+		Class.forName("org.hsqldb.jdbcDriver" );
+		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:inmemory");
+        Statement stat = conn.createStatement();
+
+        stat.execute("create table message(id int primary key, message varchar(255))");
+        stat.execute("insert into message values(1, 'Hello World')");
+        ResultSet rs;
+        rs = stat.executeQuery("select * from message");
+        while (rs.next()) {
+            System.out.println(rs.getString("message"));
+        }
+        //rs.close();
+        stat.close();
+        conn.close();
+    }
 }

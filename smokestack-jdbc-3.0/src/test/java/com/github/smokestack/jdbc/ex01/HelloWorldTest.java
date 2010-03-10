@@ -17,7 +17,6 @@ public class HelloWorldTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		MockDriver.instance.reset();
 	}
 
 	@AfterClass
@@ -26,6 +25,7 @@ public class HelloWorldTest {
 
 	@Before
 	public void setUp() throws Exception {
+		MockDriver.instance.reset();
 	}
 
 	@After
@@ -33,7 +33,7 @@ public class HelloWorldTest {
 	}
 
 	@Test
-	public final void testMain() throws Exception {
+	public final void testSaveHello() throws Exception {
 		new Expectations(){
 			@Mocked( methods= {"_execute"})
 			MockStatement st;
@@ -48,14 +48,14 @@ public class HelloWorldTest {
 			}
 		};
 		Class.forName("com.github.smokestack.jdbc.MockDriver");	
-		HelloWorld.main(new String[]{});
+		new HelloWorld().saveHello();
 		// there is no easy way to get to the Connection ...
 		MockConnection c=MockDriver.instance.getMockConnections().get(0);
-		c.assertClosed();
+		c.assertExplicitClose();
 	}
 
 	@Test
-	public final void testMainAgain() throws Exception {
+	public final void testSaveHelloAgain() throws Exception {
 		new Expectations(){
 			@Mocked( methods= {"_execute"})
 			MockStatement st;
@@ -70,7 +70,7 @@ public class HelloWorldTest {
 			}
 		};
 		Class.forName("com.github.smokestack.jdbc.MockDriver");	
-		HelloWorld.main(new String[]{});
+		new HelloWorld().saveHelloAgain();
 		// there is no easy way to get to the Connection ...
 		MockConnection c=MockDriver.instance.getMockConnections().get(0);
 		c.assertClosed();
