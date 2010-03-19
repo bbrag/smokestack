@@ -109,21 +109,34 @@ public class MockConnectionFactory implements ConnectionFactory {
 		return null;
 	}
 	
-	public void validateMockComplete(){
+	/**
+	 * Utility method that should be used to ensure that the 
+	 * connection are completed. 
+	 * This assertion ensures that the mock container is in a good state
+	 */	
+	public void assertMockComplete(){
 		for (MockConnection c: mockConnections){
-			c.validateMockComplete();
+			c.assertMockComplete();
 		}
 	}
 
-	public void validateMockCommit(){
+	/**
+	 * Utility method that should be used to ensure that the 
+	 * connections are committed. 
+	 */
+	public void assertMockCommit(){
 		for (MockConnection c: mockConnections){
-			c.validateMockCommit();
+			c.assertMockCommit();
 		}
 	}
 	
-	public void validateMockRollback(){
+	/**
+	 * Utility method that should be used to ensure that the 
+	 * connection is rolled back 
+	 */
+	public void assertMockRollback(){
 		for (MockConnection c: mockConnections){
-			c.validateMockRollback();
+			c.assertMockRollback();
 		}
 	}
 

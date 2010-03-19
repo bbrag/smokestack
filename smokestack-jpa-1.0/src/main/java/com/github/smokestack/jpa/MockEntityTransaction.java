@@ -100,21 +100,24 @@ public class MockEntityTransaction implements EntityTransaction {
 	}
 
 	/**
-	 * Validation
+	 * Utility assertion method that allows the user to verify that the
+	 * transaction is completed
 	 */
 	public void assertMockComplete() {
 		assertThat("mockState", mockState, AnyOf.anyOf(Matchers.equalTo(EntityTransactionState.COMMIT), Matchers.equalTo(EntityTransactionState.ROLLBACK)));	
 	}
 	
 	/**
-	 * Validation
+	 * Utility assertion method that allows the user to verify that the 
+	 * transaction is committed
 	 */
 	public void assertMockCommit() {
 		assertThat("mockState", mockState, Is.is(EntityTransactionState.COMMIT));
 	}
 	
 	/**
-	 * Validation
+	 * Utility assertion method that allows the user to verify that the 
+	 * transaction is rolled back
 	 */
 	public void assertMockRollback() {
 		assertThat("mockState", mockState, Is.is(EntityTransactionState.ROLLBACK));

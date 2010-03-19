@@ -464,21 +464,27 @@ public class MockSession implements Session {
 	}
 
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that the 
+	 * session is closed
 	 */
 	public void assertMockComplete() {
 		assertThat(mockSessionState, Is.is(SessionState.CLOSE));
 	}
-
+	
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that the 
+	 * session is committed
 	 */
 	public void assertMockCommit() {
 		assertThat(mockTransactionState, Is.is(TransactionState.COMMIT));
 	}
 
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that the 
+	 * session is rolled back
 	 */
 	public void assertMockRollback() {
 		assertThat(mockTransactionState, Is.is(TransactionState.ROLLBACK));

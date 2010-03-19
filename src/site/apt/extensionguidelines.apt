@@ -1,12 +1,17 @@
 ------
 Extension Guidelines
 ------
-	The design is based on the following classification of operations:
-	* Methods that change the state of the container (e.g connection.commit())
-	* Methods that provide container specific components (e.g connection.createStatement())
-	* Methods that are simple getter/setter types (e.g connection.getHoldability(), connection.setHoldability())
-	* Methods that prepare the container/component for use (e.g connection.setSavePoint())
-	* Methods that the users directly interact with and expect certain output (e.g resultSet.getInt())
+  The design is based on the following classification of operations:
+	
+  * Methods that provide container specific components (e.g connection.createStatement())
+
+  * Methods that change the state of the container (e.g connection.commit())
+  
+  * Methods that are simple getter/setter types (e.g connection.getHoldability(), connection.setHoldability())
+  
+  * Methods that prepare the container/component for use (e.g connection.setSavePoint())
+  
+  * Methods that the users directly interact with and expect certain output (e.g resultSet.getInt())
 	
 	Based on the above classification we have followed the simple rules given below. These 
 	standardizes how the mock containers behave and if you are looking for creating extensions,
@@ -15,66 +20,23 @@ Extension Guidelines
 *----------------+----------------------------+--------------------+-----------------------------+
 |Method types    | Examples 		          | Has Implementation | Needs Mock Implementation   |
 *----------------+----------------------------+--------------------*-----------------------------*
-|Container       |connection.commit()         | Yes                | No                          |
-|Specific        |connection.createStatement()|                    |                             |            
+|Container       |connection.createStatement()| Yes                | No                          |
+|Specific        |							  |                    |                             |            
+*----------------+----------------------------+--------------------*-----------------------------*
+|Change the      |connection.commit()         | Yes                | No                          |
+|Container State |		 					  |                    |                             |  
 *----------------+----------------------------+--------------------*-----------------------------*
 |Getter/         |connection.getHoldability() | Yes                | No                          |
 |Setters         |connection.setHoldability() |                    |                             |  
 *----------------+----------------------------+--------------------*-----------------------------*
 |Prepare methods |connection.setSavePoint()   | Yes                | No                          |
 *----------------+----------------------------+--------------------*-----------------------------*
-|Integration     |resultSet.getInt()  		  | No                 | Yes                         |
+|Interaction     |resultSet.getInt()  		  | No                 | Yes                         |
 *----------------+----------------------------+--------------------*-----------------------------*
 
 	Some of the cases are explained in detail
-	
-	[[1]]	Simple getters that you do not do anything with...if you prefer to override, you still override the 
-	corresponding _method. 
-	 
-		<<<public boolean getAutoCommit() throws SQLException \{ \
-			assertThat(mockConnectionState, IsNot.not(ConnectionState.CLOSE)); \
-			return _getAutoCommit(); \
-		\} \
-	\
-		public boolean _getAutoCommit() \{ \
-			return autoCommitState \\=\\= AutoCommitState.ENABLED?true:false; \
-		\}>>>  
-	 
-	[[2]]	Simple setters that you do not do anything with...if you prefer to override, 
-	you do the actual method override 
-	 
-		<<<public void setAutoCommit(boolean autoCommit) throws SQLException \{ \
-			assertThat(mockConnectionState, IsNot.not(ConnectionState.CLOSE)); \
-			_setAutoCommit(autoCommit); \ 
-		\} \
-	\
-		public void _setAutoCommit(boolean autoCommit) \{ \
-			autoCommitState \= autoCommit? AutoCommitState.ENABLED:AutoCommitState.DISABLED; \
-		\} >>> 
-	 
-	[[3]] Interactions methods - Because this is not a getter (as there is not direct setter for this one, 
-	if you are using this, you will have to override its corresponding _getWarnings() method and 
-	tell exactly what you want the framework to return to you. 
-	           <<<public SQLWarning getWarnings() throws SQLException \{ \
-	                        assertThat(mockConnectionState, IsNot.not(ConnectionState.CLOSE)); \
-	                        return _getWarnings(); \
-	            \} \
-	 \
-	            public SQLWarning _getWarnings() \{ \
-	                        throw new NeedsMockDefinitionException(); \
-	            \}>>> 
-	 
-	 Another Example\
-	  <<<	public boolean last() throws SQLException \{ \
-			assertThat(mockState, AnyOf.anyOf(IsNot.not(ResultSetState.CLOSE), IsNot.not(ResultSetState.AUTOCLOSE))); \
-			return _last(); \
-		\} \
-	\
-		public boolean _last() \{ \
-			throw new NeedsMockDefinitionException(); \	
-		\}>>>  
-	 
-	[[4]] Container Specific - The framework is directly responsible for giving you the statement and 
+
+	[[1]] Container Specific - The framework is directly responsible for giving you the statement and 
 	keep track of the same. If you want to overrride it, say to throw the SQLException, you override 
 	the _createStatement method.  
 	 
@@ -105,8 +67,7 @@ Extension Guidelines
 		public void _commit() throws SQLException \{ \
 		\} >>>  
 	 
-	 
-	[[5]] Container Specific - Special case of the above, contains container state management stuff 
+	[[2]] Change the container state - Special case of the above, contains container state management stuff 
 	that you can still override without disrupting the framework 
 	 
 	            <<<public void rollback(Savepoint savepoint) throws SQLException \{ \
@@ -118,8 +79,32 @@ Extension Guidelines
 	            \
 	            public void _rollback(Savepoint savepoint) throws SQLException \{ \
 	            \}>>> 
+	 	 	
+	[[3]] Getter Methods - Simple getters that you do not do anything with...if you prefer to override, you still override the 
+	corresponding _method. 
 	 
-	[[6]] Preparation Methods - Nothing special about these. Holds internal state.
+		<<<public boolean getAutoCommit() throws SQLException \{ \
+			assertThat(mockConnectionState, IsNot.not(ConnectionState.CLOSE)); \
+			return _getAutoCommit(); \
+		\} \
+	\
+		public boolean _getAutoCommit() \{ \
+			return autoCommitState \\=\\= AutoCommitState.ENABLED?true:false; \
+		\}>>>  
+	 
+	[[3]] Prepare Methods - Simple setters that you do not do anything with...if you prefer to override, 
+	you do the actual method override 
+	 
+		<<<public void setAutoCommit(boolean autoCommit) throws SQLException \{ \
+			assertThat(mockConnectionState, IsNot.not(ConnectionState.CLOSE)); \
+			_setAutoCommit(autoCommit); \ 
+		\} \
+	\
+		public void _setAutoCommit(boolean autoCommit) \{ \
+			autoCommitState \= autoCommit? AutoCommitState.ENABLED:AutoCommitState.DISABLED; \
+		\} >>> 
+	 
+	[[5]] Preparation Methods - Nothing special about these. Holds internal state.
 	
 		<<< public void clearBatch() throws SQLException \{ \
 			assertThat(mockState, AnyOf.anyOf(IsNot.not(StatementState.CLOSE), IsNot.not(StatementState.AUTOCLOSE))); \
@@ -130,6 +115,25 @@ Extension Guidelines
 		public void _clearBatch() \{ \
 			batchSQLs.clear(); \
 		\} >>>  
+	 	 
+	[[65]] Interactions methods - Because this is not a getter (as there is not direct setter for this one, 
+	if you are using this, you will have to override its corresponding _getWarnings() method and 
+	tell exactly what you want the framework to return to you. 
+	           <<<public SQLWarning getWarnings() throws SQLException \{ \
+	                        assertThat(mockConnectionState, IsNot.not(ConnectionState.CLOSE)); \
+	                        return _getWarnings(); \
+	            \} \
+	 \
+	            public SQLWarning _getWarnings() \{ \
+	                        throw new NeedsMockDefinitionException(); \
+	            \}>>> 
 	 
-
-	
+	 Another Example\
+	  <<<	public boolean last() throws SQLException \{ \
+			assertThat(mockState, AnyOf.anyOf(IsNot.not(ResultSetState.CLOSE), IsNot.not(ResultSetState.AUTOCLOSE))); \
+			return _last(); \
+		\} \
+	\
+		public boolean _last() \{ \
+			throw new NeedsMockDefinitionException(); \	
+		\}>>>  

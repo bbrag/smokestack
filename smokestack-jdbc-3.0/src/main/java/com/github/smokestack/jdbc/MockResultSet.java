@@ -1772,10 +1772,20 @@ public class MockResultSet implements ResultSet {
 		}
 	}
 
+	/**
+	 * Utility assertion method that allows the user to verify
+	 * that the result set is closed. Can be either explicitly closed
+	 * or implicitly closed by means of closing the statement or the 
+	 * connection
+	 */
 	public void assertClosed() {
 		assertThat(mockState, AnyOf.anyOf(Is.is(ResultSetState.CLOSE), Is.is(ResultSetState.AUTOCLOSE)));
 	}
-
+	
+	/**
+	 * Utility assertion method that allows the user to verify
+	 * that the result set is explicitly closed. 
+	 */
 	public void assertExplicitClose() {
 		assertThat(mockState, Is.is(ResultSetState.CLOSE));
 	}

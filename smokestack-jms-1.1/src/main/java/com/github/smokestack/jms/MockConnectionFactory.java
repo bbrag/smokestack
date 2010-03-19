@@ -67,7 +67,9 @@ public class MockConnectionFactory implements ConnectionFactory, Serializable, R
 	}
 
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that all the 
+	 * connections associated with this connection factory are completed
 	 */
 	public void assertMockComplete() {
 		for (MockConnection c: mockConnections){
@@ -76,7 +78,9 @@ public class MockConnectionFactory implements ConnectionFactory, Serializable, R
 	}
 
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that all the 
+	 * connections associated with this connection factory are committed
 	 */
 	public void assertMockCommit() {
 		for (MockConnection c: mockConnections){
@@ -85,7 +89,9 @@ public class MockConnectionFactory implements ConnectionFactory, Serializable, R
 	}
 
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that all the 
+	 * connections associated with this connection factory are rolledback
 	 */
 	public void assertMockRollback() {
 		for (MockConnection c: mockConnections){

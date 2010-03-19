@@ -54,4 +54,9 @@ public class HelloWorld {
         stat.close();
         conn.close();
     }
+    
+    public static void main(String...args) throws Exception{
+    	HelloWorld hw = new HelloWorld();
+    	hw.saveHello();
+    }
 }

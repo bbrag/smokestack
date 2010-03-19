@@ -109,33 +109,53 @@ public class MockConnection implements Connection {
 		return null;
 	}
 	
-	public void validateMockComplete(){
+	/**
+	 * Utility method that should be used to ensure that the 
+	 * connection and all its dependent transactions and interactions
+	 * are completed. 
+	 * This assertion ensures that the mock container is in a good state
+	 */
+	public void assertMockComplete(){
 		assertThat("connectionState", connectionState, Is.is(ConnectionState.CLOSE));
 		if (mockTransaction!=null){
 			mockTransaction.assertMockComplete();			
 		}
 		if (mockInteraction!=null){
-			mockInteraction.validateMockComplete();			
+			mockInteraction.assertMockComplete();			
 		}		
 	}
 	
-	public void validateMockCommit(){
+	/**
+	 * Utility method that should be used to ensure that the 
+	 * all the dependent transactions and interactions
+	 * are committed. 
+	 * This assertion would be invoked to verify that the 
+	 * transactions and interactions were committed. 
+	 */
+	public void assertMockCommit(){
 		assertThat("connectionState", connectionState, Is.is(ConnectionState.CLOSE));
 		if (mockTransaction!=null){
 			mockTransaction.assertMockCommit();			
 		}
 		if (mockInteraction!=null){
-			mockInteraction.validateMockComplete();			
+			mockInteraction.assertMockComplete();			
 		}		
 	}
 	
-	public void validateMockRollback(){
+	/**
+	 * Utility method that should be used to ensure that the 
+	 * all the dependent transactions and interactions
+	 * are in a rollback state.
+	 * This assertion would be invoked to verify that the 
+	 * transaction rolledback as expected
+	 */
+	public void assertMockRollback(){
 		assertThat("connectionState", connectionState, Is.is(ConnectionState.CLOSE));
 		if (mockTransaction!=null){
 			mockTransaction.validateMockRollback();			
 		}
 		if (mockInteraction!=null){
-			mockInteraction.validateMockComplete();			
+			mockInteraction.assertMockComplete();			
 		}		
 	}
 	

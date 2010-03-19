@@ -67,7 +67,7 @@ public class SampleCCITest {
 		inRec.setRecordShortDescription("foo");
 		Record outRec = cci.execute(inRec);
 		assertThat(outRec.getRecordName(), Is.is("BAR"));
-		cf.validateMockCommit();
+		cf.assertMockCommit();
 		ic.close();
 	}
 
@@ -95,7 +95,7 @@ public class SampleCCITest {
 		inRec.setRecordShortDescription("foo");
 		Record outRec = cci.execute(inRec);
 		assertThat(outRec.getRecordName(), Is.is("BAR"));
-		cf.validateMockCommit();
+		cf.assertMockCommit();
 		ic.close();
 	}
 
@@ -134,7 +134,7 @@ public class SampleCCITest {
 		Record outRec1 = cci.execute(inRec1);
 		assertThat(outRec1.getRecordName(), Is.is("BAR1"));
 
-		cf.validateMockCommit();
+		cf.assertMockCommit();
 		ic.close();
 	}
 }

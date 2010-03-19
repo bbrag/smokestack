@@ -630,6 +630,11 @@ public class MockStatement implements Statement {
 		this.resultSetHoldability = resultSetHoldability;
 	}
 	
+	/**
+	 * Utility assertion method that allows the users to verify that the
+	 * statement is explicitly closed and all its associated result sets
+	 * are also explicitly closed
+	 */
 	public void assertExplicitClose() {
 		assertThat(mockState, Is.is(StatementState.CLOSE));
 		for(MockResultSet rs: mockResultSets){
@@ -637,7 +642,10 @@ public class MockStatement implements Statement {
 		}
 	}
 
-	//CLOSE is super-state of AUTOCLOSE
+	/**
+	 * Utility assertion method that allows the users to verify that the
+	 * statement is closed and all its associated result sets
+	 */
 	public void assertClosed() {
 		assertThat(mockState, AnyOf.anyOf(Is.is(StatementState.CLOSE), Is.is(StatementState.AUTOCLOSE)));
 		for(MockResultSet rs: mockResultSets){

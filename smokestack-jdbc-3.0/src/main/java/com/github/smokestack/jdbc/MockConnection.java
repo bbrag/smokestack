@@ -558,8 +558,9 @@ public class MockConnection implements Connection {
 	}
 	
 	/**
-	 * Validation
-	 * How do you know the order to be validated? Conn closed first, then stmts?
+	 * Validation utility method
+	 * This utility method checks to see if the unit under test has 
+	 * made explicit calls to close all the open artifacts (ResultSets, Statements, Connections) 
 	 */
 	public void assertExplicitClose() {
 		assertThat(mockConnectionState, Is.is(ConnectionState.CLOSE));
@@ -572,8 +573,12 @@ public class MockConnection implements Connection {
 	}
 
 	/**
-	 * Validation
-	 * How do you know the order to be validated? Conn closed first, then stmts?
+	 * Validation utility method
+	 * This utility method checks to see if the unit under test has 
+	 * closed all the open artifacts (ResultSets, Statements, Connections)
+	 * This can mean that only connection.close was called which would effectively close 
+	 * all the corresponding open components.
+	 * This assertion is to be used when testing the closure of the JDBC artifacts
 	 */
 	public void assertClosed() {
 		assertThat(mockConnectionState, Is.is(ConnectionState.CLOSE));
@@ -585,34 +590,49 @@ public class MockConnection implements Connection {
 		}
 	}	
 	/**
-	 * Validation
+	 * Validation utility method
+	 * Allows users to verify that the transaction is in the committed state
+	 * and that a call to explicitly commit the transaction was invoked.
+	 * This assertion would be used to test any unit that explicitly 
+	 * commits transactions.
 	 */
 	public void assertExplicitCommit() {
 		assertThat("", mockTransactionState, Is.is(TransactionState.COMMIT));
 	}
 
 	/**
-	 * Validation
+	 * Validation utility method
+	 * Allows users to verify that the transaction is in the committed state
+	 * This assertion would be used to test any unit that assumes that the 
+	 * commit would happen by default.
 	 */
 	public void assertAutoCommit() {
 		assertThat("", mockTransactionState, Is.is(TransactionState.AUTOCOMMIT));
 	}
-
+	
 	/**
-	 * Validation
+	 * Validation utility method
+	 * Allows users to verify that the transaction is in the rollback state
+	 * and that a call to explicitly rollback the transaction was invoked.
+	 * This assertion would be used to test any unit that explicitly rollbacks 
+	 * transactions, typically during exceptions
 	 */
 	public void assertExplicitRollback() {
 		assertThat(mockTransactionState, Is.is(TransactionState.ROLLBACK));
 	}
 
 	/**
-	 * Validation
+	 * Validation utility method
+	 * Allows users to verify that the transaction is in the rollback state
+	 * This assertion would be used to test any unit that assumes that rollback 
+	 * would happen by default.
 	 */
 	public void assertAutoRollback() {
 		assertThat(mockTransactionState, Is.is(TransactionState.AUTOROLLBACK));
 	}
 
 	/**
+	 * Returns the list of all statements created during the running of the unit
 	 * @return the mockStatements
 	 */
 	protected List<MockStatement> getMockStatements() {
@@ -620,6 +640,7 @@ public class MockConnection implements Connection {
 	}
 
 	/**
+	 * Returns the state of the current connection
 	 * @return the mockConnectionState
 	 */
 	protected ConnectionState getMockConnectionState() {
@@ -627,6 +648,8 @@ public class MockConnection implements Connection {
 	}
 
 	/**
+	 * 
+	 * Returns the transaction state of the current transaction
 	 * @return the mockTransactionState
 	 */
 	protected TransactionState getMockTransactionState() {

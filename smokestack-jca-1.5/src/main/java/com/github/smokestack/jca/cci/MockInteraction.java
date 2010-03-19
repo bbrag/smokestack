@@ -107,7 +107,12 @@ public class MockInteraction implements Interaction {
 		return null;
 	}
 
-	public void validateMockComplete(){
+	/**
+	 * Utility method that should be used to ensure that the 
+	 * Interaction state is closed 
+	 * This assertion ensures that the mock container is in a good state
+	 */
+	public void assertMockComplete(){
 		assertThat("connectionState", interactionState, Is.is(InteractionState.CLOSE));	
 	}
 

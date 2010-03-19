@@ -65,14 +65,27 @@ public class MockLocalTransaction implements LocalTransaction {
 		return null;
 	}
 
+	/**
+	 * Utility assertion that allows the users to verify that the 
+	 * transaction state is completed. Can be either committed or 
+	 * rolled back 
+	 */
 	public void assertMockComplete(){
 		assertThat("localTransactionState", localTransactionState, AnyOf.anyOf(Matchers.equalTo(LocalTransactionState.COMMIT), Matchers.equalTo(LocalTransactionState.ROLLBACK)));	
 	}
 	
+	/**
+	 * Utility assertion that allows the user to verify that the 
+	 * transaction is in committed state.
+	 */
 	public void assertMockCommit(){
 		assertThat("localTransactionState", localTransactionState, Is.is(LocalTransactionState.COMMIT));	
 	}
 
+	/**
+	 * Utility assertion that allows the users to verify that the 
+	 * transaction is rolled back.
+	 */
 	public void validateMockRollback(){
 		assertThat("localTransactionState", localTransactionState, Is.is(LocalTransactionState.ROLLBACK));	
 	}

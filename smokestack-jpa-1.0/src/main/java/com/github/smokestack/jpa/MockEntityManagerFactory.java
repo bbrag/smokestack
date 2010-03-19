@@ -101,7 +101,8 @@ public class MockEntityManagerFactory implements EntityManagerFactory {
 	}
 
 	/**
-	 * Validation
+	 * Utility assertion method that allows the users to verify that the
+	 * state of all the entity managers is committed
 	 */
 	public void assertMockCommit() {
 		assertThat("mockState", mockState, Is.is(EMFactoryState.CLOSE));
@@ -111,7 +112,8 @@ public class MockEntityManagerFactory implements EntityManagerFactory {
 	}
 
 	/**
-	 * Validation
+	 * Utility assertion method that allows the users to verify that the
+	 * state of all the entity managers is rolled back.
 	 */
 	public void assertMockRollback() {
 		assertThat("mockState", mockState, Is.is(EMFactoryState.CLOSE));

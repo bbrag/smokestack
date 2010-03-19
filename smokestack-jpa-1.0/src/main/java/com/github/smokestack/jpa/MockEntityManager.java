@@ -312,7 +312,8 @@ public class MockEntityManager implements EntityManager {
 	}
 
 	/**
-	 * Validation
+	 * Utility assertion that allows the user to verify that the
+	 * transaction is committed
 	 */
 	public void assertMockCommit() {
 		assertThat("mockState", mockState, Is.is(EntityManagerState.CLOSE));
@@ -322,7 +323,8 @@ public class MockEntityManager implements EntityManager {
 	}
 
 	/**
-	 * Validation
+	 * Utility assertion that allows the user to verify that the
+	 * transaction is rolled back
 	 */
 	public void assertMockRollback() {
 		assertThat("mockState", mockState, Is.is(EntityManagerState.CLOSE));

@@ -29,4 +29,17 @@ JDBC Module Usage
 		* Assert that all is good with the container
 			< c.assertClosed();> font.
 	
+	Note:
+	
+	*  It is important to understand how the JDBC drivers are loaded. When 
+	Class.forName() is invoked to load the driver, the order in which 
+	the MockDriver class is loaded is important. To ensure that the MockDriver
+	is loaded, you would have to, in the test, do the following
+	
+	* Load the MockDriver using Class.forName
+	
+	* Load the actual driver using Class.forName
+	
+	This is only when you are using Driver and not DataSource.  
+
 	You can refer to the samples provided along with the source for more details.

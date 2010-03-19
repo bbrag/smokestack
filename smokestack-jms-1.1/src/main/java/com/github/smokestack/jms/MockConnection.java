@@ -189,7 +189,9 @@ public class MockConnection implements Connection {
 	}
 
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that all the 
+	 * sessions associated with this connection are closed
 	 */
 	public void assertMockComplete() {
 		assertThat("mockState", mockState, Is.is(ConnectionState.CLOSE));
@@ -199,7 +201,9 @@ public class MockConnection implements Connection {
 	}
 
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that all the 
+	 * sessions associated with this connection are committed
 	 */
 	public void assertMockCommit() {
 		assertThat("mockState", mockState, Is.is(ConnectionState.CLOSE));
@@ -209,7 +213,9 @@ public class MockConnection implements Connection {
 	}
 
 	/**
-	 * Validation
+	 * Utility Validation method
+	 * This provides the user with the ability to confirm that all the 
+	 * sessions associated with this connection are rolled back
 	 */
 	public void assertMockRollback() {
 		assertThat("mockState", mockState, Is.is(ConnectionState.CLOSE));
